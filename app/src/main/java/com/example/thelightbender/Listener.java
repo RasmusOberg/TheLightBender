@@ -17,17 +17,27 @@ public class Listener implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        Log.d(TAG, "onSensorChanged: Inside onsensor");
         if(event.sensor.getType() == Sensor.TYPE_LIGHT){
             luxValue = event.values[0];
             Log.d(TAG, "onSensorChanged: " + luxValue);
             if(luxValue > 0 && luxValue < 100){
                 main.changeScreenBrightness(1/luxValue);
-            }else if(luxValue > 1000)
+                main.setFlashlightEnabled(true);
+            }else if(luxValue > 1000) {
+                main.setFlashlightEnabled(false);
                 main.changeScreenBrightness(255);
-            else if(luxValue > 2000)
+            }else if(luxValue > 2000) {
                 main.changeScreenBrightness(10);
-        }else if(event.sensor.getType() == Sensor.TYPE_PROXIMITY){
+                main.setFlashlightEnabled(false);
+            }
+        }
+        if(event.sensor.getType() == Sensor.TYPE_PROXIMITY){
             distanceFromPhone = event.values[0];
+            if(distanceFromPhone < 1.0 && !main.getFlashlightStatus())
+                main.turnOnFlashlight();
+            else
+                main.turnOffFlashlight();
             Log.d(TAG, "onSensorChanged: Distance = " + distanceFromPhone);
         }
     }

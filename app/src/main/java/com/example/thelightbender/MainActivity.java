@@ -21,6 +21,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private RadioGroup group1, group2;
     private RadioButton btn1, btn2, btn3, btn4, btn5, btn6, btn7;
     private Button confirm;
+    private SeekBar seekBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,9 @@ public class MainActivity extends AppCompatActivity {
         btn5 = findViewById(R.id.button5);
         btn6 = findViewById(R.id.button6);
         btn7 = findViewById(R.id.button7);
+        seekBar = findViewById(R.id.seekbar);
+        seekBar.setMax(100);
+        seekBar.setMin(0);
         confirm = findViewById(R.id.confirm);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,6 +91,24 @@ public class MainActivity extends AppCompatActivity {
                     windowBrightness = false;
                     Toast.makeText(getApplicationContext(),  "This is permanent!", Toast.LENGTH_SHORT).show();
                 }
+
+            }
+        });
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                int value = seekBar.getProgress();
+                Log.d(TAG, "onProgressChanged: value = " + value);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
     }

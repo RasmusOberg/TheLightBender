@@ -17,7 +17,6 @@ public class Listener implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        Log.d(TAG, "onSensorChanged: Inside onsensor");
         if(event.sensor.getType() == Sensor.TYPE_LIGHT){
             luxValue = event.values[0];
             Log.d(TAG, "onSensorChanged: " + luxValue);
@@ -26,9 +25,9 @@ public class Listener implements SensorEventListener {
                 main.setFlashlightEnabled(true);
             }else if(luxValue > 1000) {
                 main.setFlashlightEnabled(false);
-                main.changeScreenBrightness(255);
+                main.changeScreenBrightness(255/luxValue);
             }else if(luxValue > 2000) {
-                main.changeScreenBrightness(10);
+                main.changeScreenBrightness(10/luxValue);
                 main.setFlashlightEnabled(false);
             }
         }

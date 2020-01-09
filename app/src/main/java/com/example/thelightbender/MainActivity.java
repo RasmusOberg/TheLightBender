@@ -1,5 +1,6 @@
 package com.example.thelightbender;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentResolver;
@@ -20,6 +21,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -27,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private SensorEventListener sensorEventListener;
     private CameraManager cameraManager;
     private Sensor sensorLight, sensorProximity;
-    private boolean sensorLightPresent, sensorProximityPresent, isFlashLightOn, flashlightEnabled;
+    private boolean sensorLightPresent, sensorProximityPresent, isFlashLightOn, flashlightEnabled, windowBrightness;
     private Window window;
     private ContentResolver contentResolver;
     private float brightness;
@@ -39,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate: FUCK");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         sensorManager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
@@ -77,8 +78,14 @@ public class MainActivity extends AppCompatActivity {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int radioID = group2.getCheckedRadioButtonId();
-                Log.d(TAG, "onClick: Val = " + radioID);
+                int radioID2 = group2.getCheckedRadioButtonId();
+                Log.d(TAG, "onClick: Val = " + radioID2);
+                if(radioID2 == 2131165223)
+                    windowBrightness = true;
+                else if(radioID2 == 2131165224){
+                    windowBrightness = false;
+                    Toast.makeText(getApplicationContext(),  "This is permanent!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -102,18 +109,21 @@ public class MainActivity extends AppCompatActivity {
         flashlightEnabled = bool;
     }
 
-    public void changeScreenBrightness(float brightness){
+    public void changeScreenBrightness(float brightness) {
         this.brightness = brightness;
 
-        if(!Settings.System.canWrite(this)){
-            Intent i = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
-            startActivity(i);
-        }else{
-            Settings.System.putInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS, (int)(this.brightness*255));
+        if (!windowBrightness) {
+            if (!Settings.System.canWrite(this)) {
+                Intent i = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                startActivity(i);
+            } else {
+                Settings.System.putInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS, (int) (this.brightness * 255));
+            }
+        }else {
+            WindowManager.LayoutParams layoutParams = window.getAttributes();
+            layoutParams.screenBrightness = this.brightness;
+            window.setAttributes(layoutParams);
         }
-        WindowManager.LayoutParams layoutParams = window.getAttributes();
-        layoutParams.screenBrightness = this.brightness;
-        window.setAttributes(layoutParams);
 
         int a = 0;
         try {

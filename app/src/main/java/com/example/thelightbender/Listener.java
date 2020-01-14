@@ -28,11 +28,11 @@ public class Listener implements SensorEventListener {
             }else if(luxValue > 1000) {
                 main.setFlashlightEnabled(false);
                 value = 1-(1/luxValue);
-                main.changeScreenBrightness(1/value);
+                main.changeScreenBrightness(value);
                 main.turnOffFlashlight();
             }else if(luxValue > 2000) {
                 value = 1-(1/luxValue);
-                main.changeScreenBrightness(1/value);
+                main.changeScreenBrightness(value);
                 main.setFlashlightEnabled(false);
                 main.turnOffFlashlight();
             }

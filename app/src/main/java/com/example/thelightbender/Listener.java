@@ -20,14 +20,18 @@ public class Listener implements SensorEventListener {
         if(event.sensor.getType() == Sensor.TYPE_LIGHT){
             luxValue = event.values[0];
             Log.d(TAG, "onSensorChanged: " + luxValue);
+            float value;
             if(luxValue > 0 && luxValue < 100){
-                main.changeScreenBrightness(1/luxValue);
+                value = 1-(1/luxValue);
+                main.changeScreenBrightness(value);
                 main.setFlashlightEnabled(true);
             }else if(luxValue > 1000) {
                 main.setFlashlightEnabled(false);
-                main.changeScreenBrightness(255/luxValue);
+                value = 1-(1/luxValue);
+                main.changeScreenBrightness(1/value);
             }else if(luxValue > 2000) {
-                main.changeScreenBrightness(10/luxValue);
+                value = 1-(1/luxValue);
+                main.changeScreenBrightness(1/value);
                 main.setFlashlightEnabled(false);
             }
         }

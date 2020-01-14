@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     private RadioButton btn1, btn2, btn3, btn4, btn5, btn6, btn7;
     private Button confirm;
     private SeekBar seekBar;
+    private double choice;
+    private int add = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +94,27 @@ public class MainActivity extends AppCompatActivity {
                     windowBrightness = false;
                     Toast.makeText(getApplicationContext(),  "This is permanent!", Toast.LENGTH_SHORT).show();
                 }
+                int group1ID = group1.getCheckedRadioButtonId();
+                Log.d(TAG, "onClick: " + group1ID);
+                if(group1ID == 2131165218) {
+                    choice = 0.05;
+                }
+                else if(group1ID == 2131165219) {
+                    choice = 0.15;
+                    add += 10;
+                }
+                else if(group1ID == 2131165220) {
+                    choice = 0.30;
+                    add += 30;
+                }
+                else if(group1ID == 2131165221) {
+                    choice = 0.45;
+                    add += 50;
+                }
+                else {
+                    choice = 1.0;
+                    add += 100;
+                }
 
             }
         });
@@ -101,15 +124,11 @@ public class MainActivity extends AppCompatActivity {
                 int value = seekBar.getProgress();
                 Log.d(TAG, "onProgressChanged: value = " + value);
             }
-
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
-
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
             }
         });
     }
@@ -141,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
                 startActivity(i);
             } else {
-                Settings.System.putInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS, (int) (this.brightness * 255));
+                    Settings.System.putInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS, (int) (this.brightness * 255 * choice) + add);
             }
         }else {
             WindowManager.LayoutParams layoutParams = window.getAttributes();
@@ -149,13 +168,12 @@ public class MainActivity extends AppCompatActivity {
             window.setAttributes(layoutParams);
         }
 
-        int a = 0;
         try {
-            a = Settings.System.getInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS);
+            Log.d(TAG, "changeScreenBrightness: current value = " +
+                    Settings.System.getInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS));
         } catch (Settings.SettingNotFoundException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "changeScreenBrightness: " + a);
     }
     
     public void turnOnFlashlight(){
@@ -173,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
     }
     
     public void turnOffFlashlight(){
-        if(!flashlightEnabled){
+        if(flashlightEnabled){
             Log.d(TAG, "turnOffFlashlight: OFF");
             if(parameters.get(CameraCharacteristics.FLASH_INFO_AVAILABLE)) {
                 try {

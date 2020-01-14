@@ -101,22 +101,23 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "onClick: " + group1ID);
                 if(group1ID == 2131165218) {
                     choice = 0.05;
+                    add = 0;
                 }
                 else if(group1ID == 2131165219) {
                     choice = 0.15;
-                    add += 10;
+                    add = 10;
                 }
                 else if(group1ID == 2131165220) {
                     choice = 0.30;
-                    add += 30;
+                    add = 30;
                 }
                 else if(group1ID == 2131165221) {
                     choice = 0.45;
-                    add += 50;
+                    add = 50;
                 }
                 else {
                     choice = 1.0;
-                    add += 100;
+                    add = 100;
                 }
 
             }
@@ -153,13 +154,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeScreenBrightness(float brightness) {
         this.brightness = brightness;
-
         if (!windowBrightness) {
             if (!Settings.System.canWrite(this)) {
                 Intent i = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
                 startActivity(i);
             } else {
-                    Settings.System.putInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS, (int) (this.brightness * 255 * choice) + add);
+                    Settings.System.putInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS, (int) (brightness * 255 * choice) + add);
             }
         }else {
             WindowManager.LayoutParams layoutParams = window.getAttributes();

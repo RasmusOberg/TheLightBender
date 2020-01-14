@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -39,9 +40,10 @@ public class MainActivity extends AppCompatActivity {
     private RadioGroup group1, group2;
     private RadioButton btn1, btn2, btn3, btn4, btn5, btn6, btn7;
     private Button confirm;
-    private SeekBar seekBar;
+//    private SeekBar seekBar;
     private double choice;
     private int add = 0;
+    private ImageView flashlight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void initUI(){
+        flashlight = findViewById(R.id.flashlight);
         group1 = findViewById(R.id.group1);
         group2 = findViewById(R.id.group2);
         btn1 = findViewById(R.id.button1);
@@ -78,9 +81,9 @@ public class MainActivity extends AppCompatActivity {
         btn5 = findViewById(R.id.button5);
         btn6 = findViewById(R.id.button6);
         btn7 = findViewById(R.id.button7);
-        seekBar = findViewById(R.id.seekbar);
-        seekBar.setMax(100);
-        seekBar.setMin(0);
+//        seekBar = findViewById(R.id.seekbar);
+//        seekBar.setMax(100);
+//        seekBar.setMin(0);
         confirm = findViewById(R.id.confirm);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,19 +121,19 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                int value = seekBar.getProgress();
-                Log.d(TAG, "onProgressChanged: value = " + value);
-            }
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
+//        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//            @Override
+//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//                int value = seekBar.getProgress();
+//                Log.d(TAG, "onProgressChanged: value = " + value);
+//            }
+//            @Override
+//            public void onStartTrackingTouch(SeekBar seekBar) {
+//            }
+//            @Override
+//            public void onStopTrackingTouch(SeekBar seekBar) {
+//            }
+//        });
     }
 
     public void getSensors(){
@@ -146,10 +149,6 @@ public class MainActivity extends AppCompatActivity {
         }else{
             sensorProximityPresent = false;
         }
-    }
-
-    public void setFlashlightEnabled(boolean bool){
-        flashlightEnabled = bool;
     }
 
     public void changeScreenBrightness(float brightness) {
@@ -178,30 +177,38 @@ public class MainActivity extends AppCompatActivity {
     
     public void turnOnFlashlight(){
         if(flashlightEnabled){
+            flashlight.setVisibility(View.VISIBLE);
             Log.d(TAG, "turnOnFlashlight: ON");
-            if(parameters.get(CameraCharacteristics.FLASH_INFO_AVAILABLE)) {
-                try {
-                    cameraManager.setTorchMode(cameraID, true);
-                 isFlashLightOn = true;
-             } catch (CameraAccessException e) {
-                     e.printStackTrace();
-                 }
-             }
+            isFlashLightOn = true;
+
+//            if(parameters.get(CameraCharacteristics.FLASH_INFO_AVAILABLE)) {
+//                try {
+//                    cameraManager.setTorchMode(cameraID, true);
+//             } catch (CameraAccessException e) {
+//                     e.printStackTrace();
+//                 }
+//             }
         }
     }
     
     public void turnOffFlashlight(){
-        if(flashlightEnabled){
+        if(!flashlightEnabled){
+            flashlight.setVisibility(View.INVISIBLE);
+            isFlashLightOn = false;
             Log.d(TAG, "turnOffFlashlight: OFF");
-            if(parameters.get(CameraCharacteristics.FLASH_INFO_AVAILABLE)) {
-                try {
-                    cameraManager.setTorchMode(cameraID, false);
-                 isFlashLightOn = false;
-              } catch (CameraAccessException e) {
-                  e.printStackTrace();
-               }
-           }
+
+//            if(parameters.get(CameraCharacteristics.FLASH_INFO_AVAILABLE)) {
+//                try {
+//                    cameraManager.setTorchMode(cameraID, false);
+//              } catch (CameraAccessException e) {
+//                  e.printStackTrace();
+//               }
+//           }
         }
+    }
+
+    public void setFlashlightEnabled(boolean bool){
+        flashlightEnabled = bool;
     }
 
     public boolean getFlashlightStatus(){

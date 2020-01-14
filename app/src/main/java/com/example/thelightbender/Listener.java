@@ -21,7 +21,7 @@ public class Listener implements SensorEventListener {
             luxValue = event.values[0];
             Log.d(TAG, "onSensorChanged: " + luxValue);
             float value;
-            if(luxValue > 0 && luxValue < 100){
+            if(luxValue > 0 && luxValue < 1000){
                 value = 1-(1/luxValue);
                 main.changeScreenBrightness(value);
                 main.setFlashlightEnabled(true);
@@ -29,18 +29,22 @@ public class Listener implements SensorEventListener {
                 main.setFlashlightEnabled(false);
                 value = 1-(1/luxValue);
                 main.changeScreenBrightness(1/value);
+                main.turnOffFlashlight();
             }else if(luxValue > 2000) {
                 value = 1-(1/luxValue);
                 main.changeScreenBrightness(1/value);
                 main.setFlashlightEnabled(false);
+                main.turnOffFlashlight();
             }
         }
         if(event.sensor.getType() == Sensor.TYPE_PROXIMITY){
             distanceFromPhone = event.values[0];
-            if(distanceFromPhone < 1.0 && !main.getFlashlightStatus())
+            if(distanceFromPhone < 1.0)
                 main.turnOnFlashlight();
-            else
+            else {
+                main.setFlashlightEnabled(false);
                 main.turnOffFlashlight();
+            }
             Log.d(TAG, "onSensorChanged: Distance = " + distanceFromPhone);
         }
     }

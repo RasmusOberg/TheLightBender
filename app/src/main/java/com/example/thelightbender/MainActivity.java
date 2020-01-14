@@ -84,7 +84,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int radioID2 = group2.getCheckedRadioButtonId();
-                Log.d(TAG, "onClick: Val = " + radioID2);
+                int index = group2.indexOfChild(findViewById(group2.getCheckedRadioButtonId()));
+                Log.d(TAG, "onClick: Val = " + index);
                 if(radioID2 == 2131165223)
                     windowBrightness = true;
                 else if(radioID2 == 2131165224){

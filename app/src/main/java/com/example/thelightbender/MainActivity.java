@@ -181,13 +181,13 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "turnOnFlashlight: ON");
             isFlashLightOn = true;
 
-//            if(parameters.get(CameraCharacteristics.FLASH_INFO_AVAILABLE)) {
-//                try {
-//                    cameraManager.setTorchMode(cameraID, true);
-//             } catch (CameraAccessException e) {
-//                     e.printStackTrace();
-//                 }
-//             }
+            if(parameters.get(CameraCharacteristics.FLASH_INFO_AVAILABLE)) {
+                try {
+                    cameraManager.setTorchMode(cameraID, true);
+             } catch (CameraAccessException e) {
+                     e.printStackTrace();
+                 }
+             }
         }
     }
     
@@ -197,13 +197,13 @@ public class MainActivity extends AppCompatActivity {
             isFlashLightOn = false;
             Log.d(TAG, "turnOffFlashlight: OFF");
 
-//            if(parameters.get(CameraCharacteristics.FLASH_INFO_AVAILABLE)) {
-//                try {
-//                    cameraManager.setTorchMode(cameraID, false);
-//              } catch (CameraAccessException e) {
-//                  e.printStackTrace();
-//               }
-//           }
+            if(parameters.get(CameraCharacteristics.FLASH_INFO_AVAILABLE)) {
+                try {
+                    cameraManager.setTorchMode(cameraID, false);
+              } catch (CameraAccessException e) {
+                  e.printStackTrace();
+               }
+           }
         }
     }
 
